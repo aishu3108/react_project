@@ -1,0 +1,48 @@
+import json
+
+# =======================
+# TXT FILE OPERATIONS
+# =======================
+
+# Write to TXT file
+with open("sample.txt", "w") as f:
+    f.write("Hello World\n")
+    f.write("This is a text file example\n")
+
+# Append to TXT file
+with open("sample.txt", "a") as f:
+    f.write("Appending a new line\n")
+
+# Read TXT file
+with open("sample.txt", "r") as f:
+    print("TXT FILE CONTENT:")
+    print(f.read())
+
+
+# =======================
+# JSON FILE OPERATIONS
+# =======================
+
+# Example JSON data
+data = {
+    "name": "Balaji",
+    "role": "SDE",
+    "skills": ["Python", "DSA", "Git"],
+    "experience": 1
+}
+
+# Write JSON to file
+with open("sample.json", "w") as f:
+    json.dump(data, f, indent=4)
+
+# Read JSON from file
+with open("sample.json", "r") as f:
+    json_data = json.load(f)
+
+print("\nJSON FILE CONTENT:")
+print(json_data)
+
+# Access JSON values
+print("\nAccessing JSON Fields:")
+print("Name:", json_data["name"])
+print("Skills:", ", ".join(json_data["skills"]))

@@ -1,0 +1,56 @@
+import json
+
+# ===============================
+# READ JSON FILE
+# ===============================
+with open("input.json", "r") as f:
+    data = json.load(f)
+
+# ===============================
+# ACCESS STEPS
+# ===============================
+print("STEPS:")
+for step in data["steps"]:
+    print(f"Step ID: {step['id']}")
+    print(f"  p1 range: {step['parameters']['p1']}")
+    print(f"  p2 range: {step['parameters']['p2']}")
+    print(f"  Dependency: {step['dependency']}")
+    print()
+
+# ===============================
+# ACCESS MACHINES
+# ===============================
+print("MACHINES:")
+for machine in data["machines"]:
+    print(f"Machine ID: {machine['machine_id']}")
+    print(f"  Step Assigned: {machine['step_id']}")
+    print(f"  Cooldown Time: {machine['cooldown_time']}")
+    print(f"  Initial Parameters: {machine['initial_parameters']}")
+    print(f"  Fluctuation: {machine['fluctuation']}")
+    print()
+
+# ===============================
+# ACCESS WAFERS
+# ===============================
+print("WAFERS:")
+for wafer in data["wafers"]:
+    print(f"Wafer Type: {wafer['type']}")
+    print(f"  Quantity: {wafer['quantity']}")
+    print(f"  Processing Times: {wafer['processing_times']}")
+    print()
+
+# ===============================
+# EXAMPLE: MODIFY JSON
+# ===============================
+# Increase cooldown time of M1 by 2
+for machine in data["machines"]:
+    if machine["machine_id"] == "M1":
+        machine["cooldown_time"] += 2
+
+# ===============================
+# WRITE BACK TO JSON
+# ===============================
+with open("output.json", "w") as f:
+    json.dump(data, f, indent=4)
+
+print("Updated JSON written to output.json")

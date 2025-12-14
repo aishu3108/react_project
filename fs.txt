@@ -1,0 +1,65 @@
+graph = {
+    'A': ['B', 'C'],
+    'B': ['D', 'E'],
+    'C': ['F'],
+    'D': [],
+    'E': [],
+    'F': []
+}
+
+visited = set() # Set to keep track of visited nodes
+traversal_order = [] # List to store the DFS traversal result
+
+def dfs(node):
+    if node not in visited:
+        visited.add(node) # Mark node as visited
+        traversal_order.append(node) # Add node to the result
+        for neighbor in graph[node]:
+            dfs(neighbor) # Recursively visit all unvisited neighbors
+
+# Start DFS traversal from node 'A'
+dfs('A')
+
+print("DFS Traversal Order:")
+print(" -> ".join(traversal_order))
+
+
+
+
+
+from collections import deque
+
+def bfs(graph, start_node):
+    if start_node not in graph:
+        return []
+
+    # Initialize a queue for BFS and a set to track visited nodes
+    queue = deque([start_node])
+    visited = {start_node}
+    traversal_order = []
+
+    while queue:
+        # Dequeue a node and visit it
+        current_node = queue.popleft()
+        traversal_order.append(current_node)
+
+        # Enqueue unvisited neighbors
+        for neighbor in graph.get(current_node, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)
+    
+    return traversal_order
+
+# Example usage:
+graph = {
+    'A': ['B', 'C'],
+    'B': ['D', 'E'],
+    'C': ['F'],
+    'D': [],
+    'E': [],
+    'F': []
+}
+
+result = bfs(graph, 'A')
+print(f"BFS Traversal Order: {result}")
