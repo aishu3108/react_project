@@ -88,3 +88,53 @@ out = open("output.txt", "w")
 out.write("BFS Traversal:\n")
 out.write(" ".join(map(str, bfs_result)))
 out.close()
+
+
+
+// ford bellman 
+
+def read_input():
+    file = open("input.txt", "r")
+    lines = file.readlines()
+    file.close()
+
+    V, E = map(int, lines[0].split())
+    edges = []
+
+    for i in range(1, E + 1):
+        u, v, w = map(int, lines[i].split())
+        edges.append((u, v, w))
+
+    source = int(lines[E + 1].strip())
+    return V, edges, source
+
+
+V, edges, source = read_input()
+
+INF = 10**9
+dist = [INF] * V
+dist[source] = 0
+
+# Relax edges V-1 times
+for _ in range(V - 1):
+    for u, v, w in edges:
+        if dist[u] != INF and dist[u] + w < dist[v]:
+            dist[v] = dist[u] + w
+
+# Check for negative cycle
+negative_cycle = False
+for u, v, w in edges:
+    if dist[u] != INF and dist[u] + w < dist[v]:
+        negative_cycle = True
+        break
+
+out = open("output.txt", "w")
+
+if negative_cycle:
+    out.write("Graph contains a negative weight cycle\n")
+else:
+    out.write("Vertex   Distance from Source\n")
+    for i in range(V):
+        out.write(f"{i}        {dist[i]}\n")
+
+out.close()
