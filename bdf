@@ -1,0 +1,90 @@
+// DFS 
+def read_graph():
+    file = open("input.txt", "r")
+    lines = file.readlines()
+    file.close()
+
+    n = int(lines[0].strip())
+    edges = lines[1:-1]
+    start = int(lines[-1].strip())
+
+    graph = {}
+    for i in range(n):
+        graph[i] = []
+
+    for edge in edges:
+        u, v = map(int, edge.split())
+        graph[u].append(v)
+        graph[v].append(u)
+
+    return graph, start
+
+
+def dfs(node, graph, visited, result):
+    visited.add(node)
+    result.append(node)
+
+    for neighbor in graph[node]:
+        if neighbor not in visited:
+            dfs(neighbor, graph, visited, result)
+
+
+graph, start_node = read_graph()
+
+visited = set()
+dfs_result = []
+
+dfs(start_node, graph, visited, dfs_result)
+
+out = open("output.txt", "w")
+out.write("DFS Traversal:\n")
+out.write(" ".join(map(str, dfs_result)))
+out.close()
+
+// Bfs 
+
+from collections import deque
+
+def read_graph():
+    file = open("input.txt", "r")
+    lines = file.readlines()
+    file.close()
+
+    n = int(lines[0].strip())
+    edges = lines[1:-1]
+    start = int(lines[-1].strip())
+
+    graph = {}
+    for i in range(n):
+        graph[i] = []
+
+    for edge in edges:
+        u, v = map(int, edge.split())
+        graph[u].append(v)
+        graph[v].append(u)
+
+    return graph, start
+
+
+graph, start_node = read_graph()
+
+visited = set()
+queue = deque()
+bfs_result = []
+
+queue.append(start_node)
+visited.add(start_node)
+
+while queue:
+    node = queue.popleft()
+    bfs_result.append(node)
+
+    for neighbor in graph[node]:
+        if neighbor not in visited:
+            visited.add(neighbor)
+            queue.append(neighbor)
+
+out = open("output.txt", "w")
+out.write("BFS Traversal:\n")
+out.write(" ".join(map(str, bfs_result)))
+out.close()
