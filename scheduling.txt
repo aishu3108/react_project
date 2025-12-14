@@ -1,0 +1,270 @@
+Do we use Topological Sort in THIS problem?
+✅ YES, conditionally
+
+We use Topological Sort when steps have dependencies
+Example:
+
+S1 → S2 → S3
+
+
+Here, S2 cannot start before S1, so order matters
+
+
+ordering before scheduling 
+
+
+kahns - BFS 
+
+from collections import deque
+
+def topo_sort(graph, indegree):
+    q = deque()
+    order = []
+
+    for step in indegree:
+        if indegree[step] == 0:
+            q.append(step)
+
+    while q:
+        curr = q.popleft()
+        order.append(curr)
+
+        for nxt in graph[curr]:
+            indegree[nxt] -= 1
+            if indegree[nxt] == 0:
+                q.append(nxt)
+
+    return order
+
+“Yes, we use topological sort when step dependencies exist.
+Steps form a DAG, and topological ordering ensures wafers follow correct processing order before scheduling machines.”
+
+Method	Uses	                Famous Name
+DFS	Stack / recursion	DFS Topo
+BFS	Queue + indegree	Kahn’s Algorithm
+
+
+How DFS Topo Works (Step-by-step)
+
+Visit a node
+
+Visit all its children
+
+AFTER finishing children → push node into stack
+
+Reverse stack at end
+
+❗ DFS Topo — PROS & CONS
+✅ Pros
+
+Simple
+
+Very fast
+
+Clean recursive logic
+
+❌ Cons (INTERVIEW TRAP ⚠️)
+
+❌ Cannot detect cycles easily
+
+❌ Uses recursion (stack overflow risk)
+
+❌ Hard to simulate real-time scheduling
+
+How BFS Topo Works
+
+Count indegree of each node
+
+Push indegree=0 nodes into queue
+
+Pop → reduce neighbors’ indegree
+
+Repeat
+
+“BFS (Kahn’s Algorithm), because it helps detect cycles and supports scheduling constraints”
+
+
+Why BFS Topo is BETTER for YOUR KLA Problem
+Requirement	      DFS	BFS
+Step dependency	       ✅	✅
+Cycle detection	       ❌	✅
+Scheduling machines	❌	✅
+Cooldown / wait logic	❌	✅
+Real-time availability	❌	✅
+
+Both DFS and BFS can produce topological order, but for scheduling problems with dependencies and validation, BFS-based Kahn’s algorithm is preferred because it detects cycles and aligns well with real-world pipeline execution.”
+
+
+What is “Topo Sort + Priority Queue”?
+
+Topological Sort decides WHAT can run
+Priority Queue decides WHAT should run FIRST
+
+This combo is used in:
+
+CPU scheduling
+
+Build systems (Make, Bazel)
+
+DAG job schedulers
+
+Your KLA wafer scheduling
+
+
+Why Topo Sort ALONE is NOT enough
+
+Topo Sort only says:
+
+“These steps are allowed now”
+
+But it does NOT answer:
+
+Which wafer first?
+
+Which machine first?
+
+Shorter job or longer job?
+
+Faster machine or slower?
+
+👉 That’s where Priority Queue (Min-Heap) comes in.
+
+
+Many students raise hands (eligible tasks)
+
+Rules:
+
+Only students who finished homework can answer (Topo)
+
+Among them, choose:
+
+Fastest speaker
+
+Or shortest answer
+
+Or highest marks
+
+That choosing = Priority Queue
+
+
+🧱 DATA STRUCTURES USED
+Purpose	          Data Structure
+Dependencies	        Graph (Adj list)
+Dependency count	HashMap (indegree)
+Ready tasks	        Priority Queue (Min Heap)
+Machine availability	HashMap
+Final schedule	List
+
+Core Scheduling Logic
+Step 1: Use BFS Topo to find READY steps
+Step 2: Push READY tasks into Min-Heap
+Step 3: Pick BEST task based on priority
+Step 4: Schedule on earliest free machine
+Step 5: Update dependencies & repeat
+
+What can be the PRIORITY?
+
+Common interview priorities:
+
+⏱ Shortest Processing Time (SPT)
+
+🕒 Earliest Start Time
+
+🧊 Machine cooldown safety
+
+⚡ Least parameter drift
+
+🧮 Least slack time
+
+👉 For KLA:
+Shortest Processing Time + Earliest Machine Free
+
+
+Milestone	Technique
+Milestone 0	Greedy
+Milestone 1	Topo Sort
+Milestone 2	Topo + PQ
+Milestone 3	Topo + PQ + Constraints
+Milestone 4	Simulation loop
+Milestone 5	Full optimizerGreedy in YOUR KLA Problem
+
+In Milestone 0, we used Greedy.
+
+Why?
+
+At each step:
+
+Pick the earliest free machine
+
+Process the next available wafer
+
+Don’t wait if something can run
+
+That is greedy scheduling.
+========
+
+Greedy Rule in Scheduling
+
+Common greedy choices:
+
+Shortest job first
+
+Earliest machine free
+
+Lowest cooldown risk
+
+Minimum parameter drift
+
+
+
+Use Greedy when:
+
+Problem explicitly allows greedy
+
+Local choice is provably optimal
+
+Real-time systems
+
+Scheduling, routing, pipelines
+
+Use DP when:
+
+Choices affect future results
+
+Multiple paths compete
+
+Optimization problems
+
+“Max / Min / Count ways”
+
+
+
+In YOUR KLA Problem
+Why Greedy works (initial milestones)
+
+Tasks are independent per step
+
+Machine availability dominates
+
+We choose earliest free machine
+
+Where DP could be used (but expensive)
+
+Try all scheduling combinations
+
+Parameter drift minimization
+
+Cooldown optimization
+
+👉 But DP would be too slow for large wafers.
+
+So industry prefers:
+
+Greedy + Topo + Priority Queue
+
+
+“Greedy algorithms make locally optimal decisions and are efficient, but they don’t always guarantee optimal solutions. Dynamic programming explores all relevant subproblems and guarantees optimality at the cost of higher time and space complexity.”
+
+
+
+
